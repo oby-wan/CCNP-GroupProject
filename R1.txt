@@ -1,4 +1,4 @@
-! R1
+!
 upgrade fpd auto
 version 15.5
 service timestamps debug datetime msec
@@ -28,7 +28,8 @@ no ip icmp rate-limit unreachable
 !
 no ip domain lookup
 ip cef
-no ipv6 cef
+ipv6 unicast-routing
+ipv6 cef
 !
 multilink bundle-name authenticated
 !
@@ -42,11 +43,11 @@ multilink bundle-name authenticated
 !
 !
 redundancy
-!         
+!
 no cdp log mismatch duplex
 !
 ip tcp synwait-time 5
-! 
+!
 !
 !
 !
@@ -74,6 +75,7 @@ interface Tunnel0
  ipv6 nhrp map multicast dynamic
  ipv6 nhrp network-id 1
  ipv6 nhrp redirect
+ ipv6 ospf 1 area 0
  tunnel source FastEthernet0/0
  tunnel mode gre multipoint
 !
@@ -82,15 +84,28 @@ interface FastEthernet0/0
  duplex full
 !
 interface GigabitEthernet1/0
- ip address 172.14.0.1 255.255.255.0
+ ip address 172.14.64.1 255.255.255.0
  negotiation auto
+ ipv6 address 2001:DB8:64::1/64
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet2/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+router ospf 1
+ router-id 1.1.1.1
+ network 172.14.0.0 0.0.255.255 area 0
 !
 ip forward-protocol nd
 no ip http server
 no ip http secure-server
-!         
+!
 !
 ip route 0.0.0.0 0.0.0.0 151.14.1.254
+!
+ipv6 router ospf 1
 !
 !
 !
@@ -111,7 +126,7 @@ mgcp profile default
 gatekeeper
  shutdown
 !
-!         
+!
 line con 0
  exec-timeout 0 0
  privilege level 15
@@ -128,4 +143,3 @@ line vty 0 4
 !
 !
 end
-
