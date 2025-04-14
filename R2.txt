@@ -28,7 +28,8 @@ no ip icmp rate-limit unreachable
 !
 no ip domain lookup
 ip cef
-no ipv6 cef
+ipv6 unicast-routing
+ipv6 cef
 !
 multilink bundle-name authenticated
 !
@@ -42,11 +43,11 @@ multilink bundle-name authenticated
 !
 !
 redundancy
-!         
+!
 no cdp log mismatch duplex
 !
 ip tcp synwait-time 5
-! 
+!
 !
 !
 !
@@ -87,6 +88,10 @@ interface GigabitEthernet1/0
  shutdown
  negotiation auto
 !
+router ospf 1
+ router-id 2.2.2.2
+ network 172.14.0.0 0.0.255.255 area 0
+!
 ip forward-protocol nd
 no ip http server
 no ip http secure-server
@@ -98,7 +103,7 @@ no ip http secure-server
 !
 control-plane
 !
-! R2
+!
 mgcp behavior rsip-range tgcp-only
 mgcp behavior comedia-role none
 mgcp behavior comedia-check-media-src disable
@@ -111,7 +116,7 @@ mgcp profile default
 !
 gatekeeper
  shutdown
-!         
+!
 !
 line con 0
  exec-timeout 0 0
@@ -129,4 +134,3 @@ line vty 0 4
 !
 !
 end
-
