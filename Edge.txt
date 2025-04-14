@@ -42,11 +42,11 @@ multilink bundle-name authenticated
 !
 !
 redundancy
-!         
+!
 no cdp log mismatch duplex
 !
 ip tcp synwait-time 5
-! 
+!
 !
 !
 !
@@ -63,7 +63,7 @@ interface Ethernet0/0
  duplex auto
 !
 interface GigabitEthernet0/0
- ip address 151.14.255.254 255.255.255.0
+ ip address 151.14.1.254 255.255.255.0
  duplex full
  speed 1000
  media-type gbic
@@ -71,6 +71,7 @@ interface GigabitEthernet0/0
 !
 interface GigabitEthernet1/0
  ip address dhcp
+ shutdown
  negotiation auto
 !
 ip forward-protocol nd
@@ -78,6 +79,7 @@ no ip http server
 no ip http secure-server
 !
 !
+ip route 0.0.0.0 0.0.0.0 151.14.1.1
 ip route 151.14.0.0 255.255.0.0 GigabitEthernet0/0
 !
 !
@@ -111,9 +113,8 @@ line aux 0
  logging synchronous
  stopbits 1
 line vty 0 4
- login    
+ login
  transport input none
 !
 !
 end
-
