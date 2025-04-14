@@ -1,5 +1,3 @@
-! SP-S1
-! Last configuration change at 19:43:04 UTC Tue Apr 1 2025
 !
 version 15.2
 service timestamps debug datetime msec
@@ -19,22 +17,23 @@ no aaa new-model
 !
 !
 !
-!         
+!
 !
 !
 ip dhcp pool DHCP-2
  network 151.14.2.0 255.255.255.0
- default-router 151.14.2.254 
- dns-server 8.8.8.8 
+ default-router 151.14.2.254
+ dns-server 8.8.8.8
 !
 ip dhcp pool DHCP-3
  network 151.14.3.0 255.255.255.0
- default-router 151.14.3.254 
- dns-server 8.8.8.8 
+ default-router 151.14.3.254
+ dns-server 8.8.8.8
 !
 !
 ip cef
-no ipv6 cef
+ipv6 unicast-routing
+ipv6 cef
 !
 !
 !
@@ -42,7 +41,7 @@ spanning-tree mode pvst
 spanning-tree extend system-id
 !
 !
-!         
+!
 !
 !
 !
@@ -81,14 +80,23 @@ interface GigabitEthernet1/0
  negotiation auto
 !
 interface GigabitEthernet1/1
+ switchport trunk allowed vlan 10
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
  negotiation auto
 !
 interface GigabitEthernet1/2
+ switchport trunk allowed vlan 20
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
  negotiation auto
 !
 interface GigabitEthernet1/3
+ switchport trunk allowed vlan 30
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
  negotiation auto
-!         
+!
 interface GigabitEthernet2/0
  negotiation auto
 !
@@ -113,6 +121,27 @@ interface GigabitEthernet3/2
 interface GigabitEthernet3/3
  negotiation auto
 !
+interface Vlan10
+ ip address 172.14.10.1 255.255.255.0
+ ipv6 address 2001:DB8:14:10::1/64
+ ipv6 ospf 1 area 0
+!
+interface Vlan20
+ ip address 172.14.20.1 255.255.255.0
+ ipv6 address 2001:DB8:14:20::1/64
+ ipv6 ospf 1 area 0
+!
+interface Vlan30
+ ip address 172.14.30.1 255.255.255.0
+ ipv6 address 2001:DB8:14:30::1/64
+ ipv6 ospf 1 area 0
+!
+router ospf 1
+ router-id 1.1.1.1
+ network 172.14.10.0 0.0.0.255 area 0
+ network 172.14.20.0 0.0.0.255 area 0
+ network 172.14.30.0 0.0.0.255 area 0
+!
 ip forward-protocol nd
 !
 ip http server
@@ -123,37 +152,40 @@ ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 !
 !
+ipv6 router ospf 1
+ router-id 1.1.1.1
+!
 !
 !
 !
 !
 control-plane
 !
-banner exec ^C
+banner exec ^CC
 IOSv - Cisco Systems Confidential -
 
 Supplemental End User License Restrictions
 
-          
-This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environme
 
 By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
 ^C
-banner incoming ^C
+banner incoming ^CC
 IOSv - Cisco Systems Confidential -
 
 Supplemental End User License Restrictions
 
-This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environme
 
 By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
-^C        
-banner login ^C
+^C
+banner login ^CC
 IOSv - Cisco Systems Confidential -
 
 Supplemental End User License Restrictions
 
-This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environme
 
 By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
 ^C
@@ -165,4 +197,3 @@ line vty 0 4
 !
 !
 end
-    
